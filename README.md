@@ -2,6 +2,8 @@
 
 This project is a web application that predicts the price of a diamond based on its characteristics using a machine learning model. The application is built using Python, with Streamlit as the web framework, and Scikit-learn for the machine learning components.
 
+# You can use the application directly through the following link: [Diamond Price Predictor](https://ashwin492-diamondpricepredictor-prediction-pipeline-pl4jvj.streamlit.app/).
+
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Features](#features)
