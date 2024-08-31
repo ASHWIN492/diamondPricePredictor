@@ -6,5 +6,6 @@ matplotlib
 xgboost
 plotly
 statsmodels
+scikit-learn
 
 -e .
