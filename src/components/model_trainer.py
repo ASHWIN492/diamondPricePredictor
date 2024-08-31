@@ -1,11 +1,8 @@
-
-
-# File: src/components/model_trainer.py
-
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
 from sklearn.tree import DecisionTreeRegressor
+from xgboost import XGBRegressor
 from src.exception import CustomException
 from src.logger import logging
 from src.utils import save_object, evaluate_model
@@ -30,12 +27,14 @@ class ModelTrainer:
                 test_array[:, :-1],
                 test_array[:, -1]
             )    
+            
             models = {
                 'LinearRegression': LinearRegression(),
                 'Lasso': Lasso(),
                 'Ridge': Ridge(),
                 'ElasticNet': ElasticNet(),
-                'DecisionTree': DecisionTreeRegressor()
+                'DecisionTree': DecisionTreeRegressor(),
+                'XGBoost': XGBRegressor()
             }
             
             model_report = evaluate_model(X_train, y_train, X_test, y_test, models)
