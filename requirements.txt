@@ -4,5 +4,7 @@ flask
 seaborn
 matplotlib
 xgboost
+plotly
+statsmodels
 
 -e .
