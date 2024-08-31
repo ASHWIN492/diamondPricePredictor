@@ -1,6 +1,8 @@
 pandas
 numpy
-flask
+scikit-learn
+streamlit
+pickle-mixin
 seaborn
 matplotlib
 xgboost
