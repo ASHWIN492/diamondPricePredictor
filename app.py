@@ -4,17 +4,16 @@ import pickle
 import os
 import plotly.express as px
 import numpy as np
+import joblib
 
 # Load the preprocessor and model
 def load_objects():
     preprocessor_path = os.path.join('artifacts', 'preprocessor.pkl')
     model_path = os.path.join('artifacts', 'model.pkl')
     
-    with open(preprocessor_path, 'rb') as file:
-        preprocessor = pickle.load(file)
-    
-    with open(model_path, 'rb') as file:
-        model = pickle.load(file)
+    # Load preprocessor and model using Joblib
+    preprocessor = joblib.load(preprocessor_path)
+    model = joblib.load(model_path)
     
     return preprocessor, model
 
@@ -63,14 +62,17 @@ if page == "Prediction":
 
     # Predict button
     if st.button('Predict Price'):
-        # Preprocess the input
-        input_processed = preprocessor.transform(input_data)
-        
-        # Make prediction
-        prediction = model.predict(input_processed)
-        
-        # Display the result
-        st.success(f'The predicted price of the diamond is ${prediction[0]:,.2f}')
+        try:
+            # Preprocess the input
+            input_processed = preprocessor.transform(input_data)
+            
+            # Make prediction
+            prediction = model.predict(input_processed)
+            
+            # Display the result
+            st.success(f'The predicted price of the diamond is ${prediction[0]:,.2f}')
+        except Exception as e:
+            st.error(f"Error in prediction: {e}")
 
 elif page == "Visualization":
     # Visualization Page
@@ -82,9 +84,7 @@ elif page == "Visualization":
                              title='Diamond Price vs Carat')
     fig_scatter.update_layout(xaxis_title='Carat', yaxis_title='Price ($)')
     st.plotly_chart(fig_scatter)
-    st.markdown("""
-    This scatter plot shows the relationship between a diamond's carat weight and its price, with the cut quality represented by color.
-    Key observations:
+    st.markdown("""This scatter plot shows the relationship between a diamond's carat weight and its price, with the cut quality represented by color.
     - There's a strong positive correlation between carat weight and price.
     - Higher quality cuts (Ideal, Premium) tend to be more expensive for the same carat weight.
     - Price variation increases with carat weight, suggesting other factors (like cut, color, and clarity) have more influence on price for larger diamonds.
@@ -94,9 +94,7 @@ elif page == "Visualization":
     st.subheader('2. Price Distribution by Cut')
     fig_box = px.box(data, x='cut', y='price', color='cut', title="Price Distribution by Cut")
     st.plotly_chart(fig_box)
-    st.markdown("""
-    This box plot displays the distribution of diamond prices for each cut quality.
-    Key observations:
+    st.markdown("""This box plot displays the distribution of diamond prices for each cut quality.
     - Ideal and Premium cuts generally have higher median prices and wider price ranges.
     - Fair cuts have the lowest median price and the narrowest price range.
     - There's significant overlap in price ranges across all cut qualities, indicating that other factors also influence price.
@@ -108,9 +106,7 @@ elif page == "Visualization":
     corr_matrix = data[numeric_cols].corr()
     fig_corr = px.imshow(corr_matrix, text_auto=True, aspect="auto", title='Correlation Heatmap of Numeric Features')
     st.plotly_chart(fig_corr)
-    st.markdown("""
-    This heatmap shows the correlation between numeric features in the dataset.
-    Key observations:
+    st.markdown("""This heatmap shows the correlation between numeric features in the dataset.
     - Carat has the strongest positive correlation with price.
     - The dimensions (x, y, z) are highly correlated with each other and with carat weight.
     - Depth and table percentages have weak correlations with price, suggesting they're less important in determining a diamond's value.
@@ -121,9 +117,7 @@ elif page == "Visualization":
     fig_color_clarity = px.box(data, x='color', y='price', color='clarity', 
                                title='Price Distribution by Color and Clarity')
     st.plotly_chart(fig_color_clarity)
-    st.markdown("""
-    This box plot shows how diamond prices vary across different color grades and clarity levels.
-    Key observations:
+    st.markdown("""This box plot shows how diamond prices vary across different color grades and clarity levels.
     - Generally, prices decrease as we move from D (best) to J (worst) in color.
     - Within each color grade, there's a clear trend of increasing prices with better clarity (from I1 to IF).
     - The impact of color on price seems more pronounced for higher clarity grades.
@@ -134,21 +128,18 @@ elif page == "Visualization":
     fig_carat_dist = px.histogram(data, x='carat', nbins=50, title='Distribution of Diamond Carat Weights')
     fig_carat_dist.update_layout(bargap=0.1)
     st.plotly_chart(fig_carat_dist)
-    st.markdown("""
-    This histogram shows the distribution of diamond carat weights in the dataset.
-    Key observations:
+    st.markdown("""This histogram shows the distribution of diamond carat weights in the dataset.
     - The distribution is right-skewed, with most diamonds weighing between 0.3 and 1.5 carats.
     - There are noticeable peaks at round numbers (0.5, 1.0, 1.5 carats), suggesting pricing strategies or consumer preferences.
     - Diamonds over 2 carats are relatively rare in this dataset.
     """)
 
+    # 6. Price Trends by Cut and Carat
     st.subheader('6. Price Trends by Cut and Carat')
     fig_trend = px.scatter(data, x='carat', y='price', color='cut', trendline='ols',
                            title='Price Trends by Cut and Carat')
     st.plotly_chart(fig_trend)
-    st.markdown("""
-    This scatter plot with trend lines shows how the relationship between carat weight and price varies across different cut qualities.
-    Key observations:
+    st.markdown("""This scatter plot with trend lines shows how the relationship between carat weight and price varies across different cut qualities.
     - All cut qualities show a positive linear relationship between carat and price.
     - The slope of the trend lines suggests that price increases more rapidly with carat weight for higher quality cuts (Ideal, Premium).
     - There's significant variation around the trend lines, indicating that other factors also influence price.
@@ -159,8 +150,7 @@ elif page == "Visualization":
 st.sidebar.header('About')
 st.sidebar.info('This app predicts the price of a diamond based on its characteristics using a machine learning model.')
 st.sidebar.header('Features Used')
-st.sidebar.markdown("""
-- Carat Weight: Weight of the diamond
+st.sidebar.markdown("""- Carat Weight: Weight of the diamond
 - Cut: Quality of the cut (Fair, Good, Very Good, Premium, Ideal)
 - Color: Diamond color, from J (worst) to D (best)
 - Clarity: A measurement of how clear the diamond is (I1 (worst), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (best))

@@ -71,12 +71,37 @@ The model is trained on a dataset of diamonds with various features. It uses the
 5. Decision Tree Regressor  
 6. XGBRegressor
 
-## Model Training Output
+### Model Training Output
 During the model training process, the following output was observed:
 
-model = cd_fast.enet_coordinate_descent(
-{'LinearRegression': 0.8478189531683753, 'Lasso': 0.8869461803291463, 'Ridge': 0.8526480584829872, 'ElasticNet': 0.8245368382630797, 'DecisionTree': 0.9612189524948617, 'XGBoost': 0.9721458428710342}
-Best Model Found, Model name: XGBoost, R2 score: 0.9721458428710342
+- **Linear Regression**
+  - `[2024-09-25 00:35:04,909] 71 root - INFO - Starting Optuna study for LinearRegression`
+  - `[2024-09-25 00:35:06,800] 76 root - INFO - Best trial for LinearRegression: {} with R2 score: 0.9077971467453405`
+
+- **Lasso**
+  - `[2024-09-25 00:35:06,801] 71 root - INFO - Starting Optuna study for Lasso`
+  - `[2024-09-25 00:36:48,367] 76 root - INFO - Best trial for Lasso: {'alpha': 0.12466789931248218} with R2 score: 0.9077908859489175`
+
+- **Ridge**
+  - `[2024-09-25 00:36:48,367] 71 root - INFO - Starting Optuna study for Ridge`
+  - `[2024-09-25 00:36:49,670] 76 root - INFO - Best trial for Ridge: {'alpha': 0.9877354284937806} with R2 score: 0.9077992549637381`
+
+- **ElasticNet**
+  - `[2024-09-25 00:36:49,670] 71 root - INFO - Starting Optuna study for ElasticNet`
+  - `[2024-09-25 00:38:26,954] 76 root - INFO - Best trial for ElasticNet: {'alpha': 0.00038093059857817273, 'l1_ratio': 0.9142385116456486} with R2 score: 0.9077899769121072`
+
+- **Decision Tree**
+  - `[2024-09-25 00:38:26,954] 71 root - INFO - Starting Optuna study for DecisionTree`
+  - `[2024-09-25 00:38:37,565] 76 root - INFO - Best trial for DecisionTree: {'max_depth': 10, 'min_samples_split': 18} with R2 score: 0.971463449713504`
+
+- **XGBoost**
+  - `[2024-09-25 00:38:37,565] 71 root - INFO - Starting Optuna study for XGBoost`
+  - `[2024-09-25 01:20:05,807] 76 root - INFO - Best trial for XGBoost: {'max_depth': 5, 'learning_rate': 0.041326860912172386, 'n_estimators': 283} with R2 score: 0.9812234655086796`
+
+- **Model Report**
+  - `[2024-09-25 01:20:05,809] 79 root - INFO - Model report: {'LinearRegression': 0.9077971467453405, 'Lasso': 0.9077908859489175, 'Ridge': 0.9077992549637381, 'ElasticNet': 0.9077899769121072, 'DecisionTree': 0.971463449713504, 'XGBoost': 0.9812234655086796}`
+  - `[2024-09-25 01:20:05,809] 99 root - INFO - Best Model Found, Model name: XGBoost, R2 score: 0.9812234655086796`
+
 
 
 
